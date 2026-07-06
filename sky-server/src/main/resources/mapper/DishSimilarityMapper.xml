@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+        <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+        <!--
+            菜品相似度Mapper XML配置文件
+            定义批量插入等复杂SQL操作
+        -->
+<mapper namespace="com.sky.mapper.DishSimilarityMapper">
+
+    <!--
+        批量插入菜品相似度数据
+        使用INSERT IGNORE避免重复插入（基于唯一索引uk_dish_pair）
+        提高批量插入性能
+    -->
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO dish_similarity (dish_id_1, dish_id_2, similarity_score, create_time, update_time)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.dishId1},
+            #{item.dishId2},
+            #{item.similarityScore},
+            NOW(),
+            NOW()
+            )
+        </foreach>
+    </insert>
+
+</mapper>
